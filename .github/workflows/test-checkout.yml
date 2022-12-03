@@ -1,6 +1,6 @@
 name: Test Checkout
 
-on: [push]
+on: [push, pull_request]
 
 jobs:
   run-github-actions:
@@ -10,6 +10,14 @@ jobs:
         run: |
           pwd
           ls -a
+          echo $GITHUB_SHA
+          echo $GITHUB_REF
+          echo $GITHUB_REF_NAME
+          echo "${{ github.head_ref }}"
+          echo "${{ github.base_ref }}"
+          echo $GITHUB_REPOSITORY
+          echo $GITHUB_WORKSPACE
+          echo "${{ github.token }}"
 
       - name: Checkout
         uses: actions/checkout@v3
