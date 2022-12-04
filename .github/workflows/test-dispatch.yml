@@ -1,0 +1,14 @@
+name: Test repository_dispatch
+
+on:
+  repository_dispatch:
+    types: [test-custom-dispatch-type]
+
+jobs:
+  run-github-actions:
+    runs-on: ubuntu-latest
+    steps:
+      - name: List Files
+        run: |
+          pwd
+          ls -a
