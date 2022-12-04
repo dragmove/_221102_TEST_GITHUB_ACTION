@@ -1,6 +1,8 @@
 name: Test Checkout
 
-on: [push, pull_request]
+on:
+  schedule:
+    - cron: "0/5 * * * *"
 
 jobs:
   run-github-actions:
