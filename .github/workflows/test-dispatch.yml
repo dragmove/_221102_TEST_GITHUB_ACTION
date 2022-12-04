@@ -11,7 +11,7 @@ jobs:
       - name: Get payload from http post request
         run: |
           echo "${{ github.event.client_payload.foo }}"
-          echo "${{ github.event.client_payload.messae }}"
+          echo "${{ github.event.client_payload.message }}"
           echo "${{ github.event.client_payload.env }}"
 
       - name: List Files
