@@ -1,8 +1,8 @@
 name: Test Checkout
 
 on:
-  schedule:
-    - cron: '0/10 * * * *'
+  pull_request:
+    types: [closed, assigned, opened, reopened]
 
 jobs:
   run-github-actions:
