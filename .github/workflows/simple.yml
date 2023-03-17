@@ -11,7 +11,7 @@ jobs:
         run: |
           FOO=$(echo "true")
           
-          if [[ $FOO == "false" ]]; then
+          if [ $FOO == "false" ]; then
             echo "false !!"
           else
             echo "true !!"
