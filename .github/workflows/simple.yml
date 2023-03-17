@@ -1,19 +1,19 @@
-name: shell commands
+name: test condition
 
 on: [push]
 
 jobs:
-  run-shell-command:
+  test_condition:
+    name: Test Condition
     runs-on: ubuntu-latest
     steps:
-      - name: echo a string
-        run: echo "hello world!!!"
-      - name: multiline script
+      - name: test condition
         run: |
-          node -v
-          npm -v
-      - name: python command
-        run: |
-          import platform
-          print(platform.processor())
-        shell: python
+          FOO=$(echo "true")
+          
+          if [[ "$FOO" == "false" ]]; then
+            echo "false !!"
+          else
+            echo "true !!"
+          fi
+      
