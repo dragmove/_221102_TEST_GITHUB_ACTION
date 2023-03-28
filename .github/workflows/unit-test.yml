@@ -28,5 +28,7 @@ jobs:
         run: |
           corepack enable
           yarn --version
+      - name: Check dependencies
+        run: yarn install --immutable
       - name: Run Test
         run: echo "🎉 run test 🎉"
