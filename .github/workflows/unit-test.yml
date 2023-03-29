@@ -28,6 +28,7 @@ jobs:
       - name: Configuration
         run: |
           corepack enable
+          corepack prepare yarn@stable --activate
           yarn --version
       - name: Check dependencies
         run: yarn install --immutable
