@@ -1,0 +1,65 @@
+name: Build Docker Image
+
+on:
+  workflow_dispatch:
+  pull_request:
+    types:
+      - closed
+    branches:
+      - 'epic/**'
+
+jobs:
+  update_version:
+    name: Update package version
+    if: github.event.pull_request.merged == true
+    runs-on: ubuntu-latest
+    steps:
+      - name: echo a string
+        run: echo "hello world!!!"
+      - name: multiline script
+        run: |
+          node -v
+          npm -v
+
+    # runs-on: ubuntu-latest
+    # strategy:
+    #   matrix:
+    #     node-version: [16.x]
+    # steps:
+    #   - name: Checkout repository codes
+    #     uses: actions/checkout@v3
+    #   - name: Setup Node.js
+    #     uses: actions/setup-node@v3
+    #     with:
+    #       node-version: ${{ matrix.node-version }}
+    #   - name: Configuration
+    #     run: |
+    #       corepack enable
+    #       corepack prepare yarn@stable --activate
+    #   - name: Check dependencies
+    #     run: yarn install --immutable
+    #   - name: Run Test
+    #     run: yarn test
+
+# jobs:
+#     unit-test:
+#         name: Run Unit Test
+#         runs-on: ubuntu-latest
+#         strategy:
+#         matrix:
+#             node-version: [16.x]
+#         steps:
+#         - name: Checkout repository codes
+#             uses: actions/checkout@v3
+#         - name: Setup Node.js
+#             uses: actions/setup-node@v3
+#             with:
+#             node-version: ${{ matrix.node-version }}
+#         - name: Configuration
+#             run: |
+#             corepack enable
+#             corepack prepare yarn@stable --activate
+#         - name: Check dependencies
+#             run: yarn install --immutable
+#         - name: Run Test
+#             run: yarn test
