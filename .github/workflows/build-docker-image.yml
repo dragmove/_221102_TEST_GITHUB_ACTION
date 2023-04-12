@@ -23,7 +23,7 @@ jobs:
       - name: echo github sha
         run: |
           echo "github sha: ${GITHUB_SHA}"
-          echo "head branch last commit sha: ${github.event.pull_request.head.sha}"
+          echo "head branch last commit sha: ${{ github.event.pull_request.head.sha }}"
 
     # runs-on: ubuntu-latest
     # strategy:
