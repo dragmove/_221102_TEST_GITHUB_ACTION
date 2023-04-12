@@ -22,8 +22,28 @@ jobs:
           npm -v
       - name: echo github sha
         run: |
-          echo "github sha: ${GITHUB_SHA}"
+          echo "GITHUB_SHA: ${GITHUB_SHA}"
           echo "head branch last commit sha: ${{ github.event.pull_request.head.sha }}"
+          echo "github.sha: ${{github.sha}}"
+    
+    # strategy:
+    #   matrix:
+    #     node-version: [16.x]
+    # steps:
+    #   - name: Checkout repository codes
+    #     uses: actions/checkout@v3
+    #   - name: Setup Node.js
+    #     uses: actions/setup-node@v3
+    #     with:
+    #       node-version: ${{ matrix.node-version }}
+    #   - name: Configuration
+    #     run: |
+    #       corepack enable
+    #       corepack prepare yarn@stable --activate
+    #   - name: Check dependencies
+    #     run: yarn install --immutable
+    #   - name: Run Test
+    #     run: yarn test
 
     # runs-on: ubuntu-latest
     # strategy:
