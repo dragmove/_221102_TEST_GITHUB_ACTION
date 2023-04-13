@@ -63,8 +63,11 @@ jobs:
           echo "HEAD_COMMIT_SHA=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
 
           git fetch --depth=1 origin develop
-          echo "DEVELOP_BRANCH_HASH=$(git rev-parse origin/develop)" >> "$GITHUB_OUTPUT"
+
+          DEVELOP_BRANCH_HASH=$(git rev-parse origin/develop)
           echo "DEVELOP_BRANCH_HASH: ${DEVELOP_BRANCH_HASH}"
+
+          echo "DEVELOP_BRANCH_HASH=${DEVELOP_BRANCH_HASH}" >> "$GITHUB_OUTPUT"
 
           echo "INTEGRATED_VERSION=$(node ./scripts/update-commit.js integrate-version ${{ github.base_ref }} ${{ github.sha }} ${DEVELOP_BRANCH_HASH})" >> "$GITHUB_OUTPUT"
 
