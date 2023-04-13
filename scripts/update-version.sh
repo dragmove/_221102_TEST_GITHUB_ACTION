@@ -4,9 +4,10 @@
 # INTEGRATED_VERSION="0.1.1"
 # GITHUB_BASE_REF="epic/NOP-29"
 
-if [ $IS_GITHUB_ACTIONS == 'true' ]; then
-  echo "GITHUB_ACTOR: ${GITHUB_ACTOR}"
+echo "GITHUB_ACTOR: ${GITHUB_ACTOR}"
+echo "INTEGRATED_VERSION: ${INTEGRATED_VERSION}"
 
+if [ $IS_GITHUB_ACTIONS == 'true' ]; then
   # set git user (triggered by github actions)
   # GITHUB_ACTOR_NAME="$(git log -n 1 --pretty=format:%an)"
   # GITHUB_ACTOR_EMAIL="$(git log -n 1 --pretty=format:%ae)"
@@ -16,10 +17,9 @@ if [ $IS_GITHUB_ACTIONS == 'true' ]; then
 
   # update version in package.json when branches are merged
   if [ "$GITHUB_BASE_REF" != 'main' ]; then
-    echo "INTEGRATED_VERSION: ${INTEGRATED_VERSION}"
-
     # yarn plugin import version
-    yarn version "${INTEGRATED_VERSION}"
+    npm version $INTEGRATED_VERSION --no-git-tag-version
+    # yarn version "${INTEGRATED_VERSION}"
 
     git status
 
