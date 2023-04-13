@@ -64,7 +64,9 @@ jobs:
 
           git fetch --depth=1 origin develop
           echo "DEVELOP_BRANCH_HASH=$(git rev-parse origin/develop)" >> "$GITHUB_OUTPUT"
-          echo "INTEGRATED_VERSION=$(node ./scripts/update-commit.js integrate-version ${{ github.base_ref }} ${{ github.sha }} $DEVELOP_BRANCH_HASH)" >> "$GITHUB_OUTPUT"
+          echo "DEVELOP_BRANCH_HASH: ${DEVELOP_BRANCH_HASH}"
+
+          echo "INTEGRATED_VERSION=$(node ./scripts/update-commit.js integrate-version ${{ github.base_ref }} ${{ github.sha }} ${DEVELOP_BRANCH_HASH})" >> "$GITHUB_OUTPUT"
 
       - name: Update package.json
         if: ${{ github.head_ref != 'main' }}
@@ -85,7 +87,7 @@ jobs:
           echo "INTEGRATED_VERSION: ${INTEGRATED_VERSION}"
           echo "IS_GITHUB_ACTIONS: ${IS_GITHUB_ACTIONS}"
 
-          run: ./scripts/update-version.sh
+        # run: ./scripts/update-version.sh
 
     #   - name: Build, tag, and push docker image to Amazon ECR
     #     env:
