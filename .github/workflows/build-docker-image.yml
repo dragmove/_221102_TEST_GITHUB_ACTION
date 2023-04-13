@@ -6,7 +6,7 @@ on:
     types:
       - closed
     branches:
-      - 'epic/**'
+      - "epic/**"
 
 jobs:
   update_version:
@@ -18,34 +18,34 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
-    
+
     permissions: # @see https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#adding-permissions-settings
       id-token: write
       contents: read
-    
+
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
-    
+
       - name: Setup Node.js
         uses: actions/setup-node@v3
         with:
           node-version: ${{ matrix.node-version }}
-    
-    #   - name: Configuration
-    #     run: |
-    #       corepack enable
-    #       corepack prepare yarn@stable --activate
-    
-    #   - name: Configure AWS credentials
-    #     uses: aws-actions/configure-aws-credentials@v2
-    #     with:
-    #       role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-    #       aws-region: ${{ secrets.AWS_REGION }}
-    
-    #   - name: Login to Amazon ECR # Check IAM policy - @see https://docs.aws.amazon.com/ko_kr/aws-managed-policy/latest/reference/AmazonEC2ContainerRegistryReadOnly.html
-    #     id: login-ecr
-    #     uses: aws-actions/amazon-ecr-login@v1
+
+      #   - name: Configuration
+      #     run: |
+      #       corepack enable
+      #       corepack prepare yarn@stable --activate
+
+      #   - name: Configure AWS credentials
+      #     uses: aws-actions/configure-aws-credentials@v2
+      #     with:
+      #       role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+      #       aws-region: ${{ secrets.AWS_REGION }}
+
+      #   - name: Login to Amazon ECR # Check IAM policy - @see https://docs.aws.amazon.com/ko_kr/aws-managed-policy/latest/reference/AmazonEC2ContainerRegistryReadOnly.html
+      #     id: login-ecr
+      #     uses: aws-actions/amazon-ecr-login@v1
 
       - name: Define variables
         id: define-variables
@@ -64,18 +64,29 @@ jobs:
 
           git fetch --depth=1 origin develop
           echo "DEVELOP_BRANCH_HASH=$(git rev-parse origin/develop)" >> "$GITHUB_OUTPUT"
-        #   echo "INTEGRATED_VERSION=$(node ./scripts/jira.js integrated-version ${{ github.base_ref }} ${{ github.sha }} $DEVELOP_BRANCH_HASH)" >> "$GITHUB_OUTPUT"
-    
+          echo "INTEGRATED_VERSION=$(node ./scripts/update-commit.js integrate-version ${{ github.base_ref }} ${{ github.sha }} $DEVELOP_BRANCH_HASH)" >> "$GITHUB_OUTPUT"
+
       - name: Update package.json
         if: ${{ github.head_ref != 'main' }}
         env:
           GITHUB_BASE_REF: ${{ github.base_ref }}
+          GITHUB_ACTOR: ${{ github.actor }}
+          INTEGRATED_VERSION: ${{ steps.define-variables.outputs.INTEGRATED_VERSION }}
+          IS_GITHUB_ACTIONS: "true"
+        shell: bash
         run: |
           echo "PACKAGE_VERSION: ${{ steps.define-variables.outputs.PACKAGE_VERSION }}"
           echo "HEAD_COMMIT_SHA: ${{ steps.define-variables.outputs.HEAD_COMMIT_SHA }}"
           echo "DEVELOP_BRANCH_HASH: ${{ steps.define-variables.outputs.DEVELOP_BRANCH_HASH }}"
-        #   echo "INTEGRATED_VERSION: ${{ steps.define-variables.outputs.INTEGRATED_VERSION }}"
-      
+          echo "INTEGRATED_VERSION: ${{ steps.define-variables.outputs.INTEGRATED_VERSION }}"
+
+          echo "GITHUB_BASE_REF: ${GITHUB_BASE_REF}"
+          echo "GITHUB_ACTOR: ${GITHUB_ACTOR}"
+          echo "INTEGRATED_VERSION: ${INTEGRATED_VERSION}"
+          echo "IS_GITHUB_ACTIONS: ${IS_GITHUB_ACTIONS}"
+
+          run: ./scripts/update-version.sh
+
     #   - name: Build, tag, and push docker image to Amazon ECR
     #     env:
     #       REGISTRY: ${{ steps.login-ecr.outputs.registry }}
@@ -85,7 +96,6 @@ jobs:
     #       echo "REGISTRY: ${REGISTRY}"
     #       echo "REPOSITORY: ${REPOSITORY}"
     #       echo "IMAGE_TAG: ${IMAGE_TAG}"
-        
 
     # steps:
     #   - name: echo a string
