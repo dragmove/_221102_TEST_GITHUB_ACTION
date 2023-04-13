@@ -18,6 +18,11 @@ jobs:
     strategy:
       matrix:
         node-version: [16.x]
+    
+    permissions: # @see https://docs.github.com/en/actions/deployment/security-hardening-your-deployments/about-security-hardening-with-openid-connect#adding-permissions-settings
+      id-token: write
+      contents: read
+    
     steps:
       - name: Checkout repo
         uses: actions/checkout@v3
@@ -56,6 +61,7 @@ jobs:
           echo "REGISTRY: ${REGISTRY}"
           echo "REPOSITORY: ${REPOSITORY}"
           echo "IMAGE_TAG: ${IMAGE_TAG}"
+        
 
     # steps:
     #   - name: echo a string
