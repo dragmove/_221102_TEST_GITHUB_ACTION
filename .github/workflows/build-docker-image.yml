@@ -43,7 +43,7 @@ jobs:
           role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
           aws-region: ${{ secrets.AWS_REGION }}
     
-      - name: Login to Amazon ECR
+      - name: Login to Amazon ECR # Check IAM policy - @see https://docs.aws.amazon.com/ko_kr/aws-managed-policy/latest/reference/AmazonEC2ContainerRegistryReadOnly.html
         id: login-ecr
         uses: aws-actions/amazon-ecr-login@v1
 
