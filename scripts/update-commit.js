@@ -27,8 +27,9 @@ function printIntegratedVersion(
     )}-${ticket}.${date}`; // e.g. 1.2.3-alpha.1234567-epic.NOP-29.20230413T075727
   }
 
-  // console.log(intVersion);
+  console.log(intVersion);
 
+  /*
   console.log(
     baseBranchName,
     triggerCommitHash,
@@ -37,6 +38,7 @@ function printIntegratedVersion(
     baseCommitHash,
     intVersion
   );
+  */
 }
 
 const main = () => {
