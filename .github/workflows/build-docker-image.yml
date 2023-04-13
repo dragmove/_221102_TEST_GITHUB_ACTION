@@ -32,35 +32,57 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
     
-      - name: Configuration
-        run: |
-          corepack enable
-          corepack prepare yarn@stable --activate
+    #   - name: Configuration
+    #     run: |
+    #       corepack enable
+    #       corepack prepare yarn@stable --activate
     
-      - name: Configure AWS credentials
-        uses: aws-actions/configure-aws-credentials@v2
-        with:
-          role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
-          aws-region: ${{ secrets.AWS_REGION }}
+    #   - name: Configure AWS credentials
+    #     uses: aws-actions/configure-aws-credentials@v2
+    #     with:
+    #       role-to-assume: ${{ secrets.AWS_ROLE_TO_ASSUME }}
+    #       aws-region: ${{ secrets.AWS_REGION }}
     
-      - name: Login to Amazon ECR # Check IAM policy - @see https://docs.aws.amazon.com/ko_kr/aws-managed-policy/latest/reference/AmazonEC2ContainerRegistryReadOnly.html
-        id: login-ecr
-        uses: aws-actions/amazon-ecr-login@v1
+    #   - name: Login to Amazon ECR # Check IAM policy - @see https://docs.aws.amazon.com/ko_kr/aws-managed-policy/latest/reference/AmazonEC2ContainerRegistryReadOnly.html
+    #     id: login-ecr
+    #     uses: aws-actions/amazon-ecr-login@v1
 
       - name: Define variables
         id: define-variables
         run: |
+          echo "GITHUB_SHA: ${GITHUB_SHA}"
+          echo "GITHUB_REF: ${GITHUB_REF}"
+
+          echo "github.ref_name: ${{ github.ref_name }}"
+          echo "github.head_ref: ${{ github.head_ref }}"
+          echo "github.base_ref: ${{ github.base_ref }}"
+          echo "github.sha: ${{github.sha}}"
+          echo "head branch last commit sha: ${{ github.event.pull_request.head.sha }}"
+
           echo "PACKAGE_VERSION=$(grep version package.json | awk -F \" '{print $4}')" >> "$GITHUB_OUTPUT"
-      
-      - name: Build, tag, and push docker image to Amazon ECR
+          echo "HEAD_COMMIT_SHA=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
+          echo "DEVELOP_BRANCH_HASH=$(git rev-parse origin/develop)" >> "$GITHUB_OUTPUT"
+        #   echo "INTEGRATED_VERSION=$(node ./scripts/jira.js integrated-version ${{ github.base_ref }} ${{ github.sha }} $DEVELOP_BRANCH_HASH)" >> "$GITHUB_OUTPUT"
+    
+      - name: Update package.json
+        if: ${{ github.head_ref != 'main' }}
         env:
-          REGISTRY: ${{ steps.login-ecr.outputs.registry }}
-          REPOSITORY: nop-ecr-repo
-          IMAGE_TAG: "${{ steps.define-variables.outputs.PACKAGE_VERSION }}-alpha.${{ github.event.pull_request.head.sha }}-epic.NOP-{ticket_number}"
+          GITHUB_BASE_REF: ${{ github.base_ref }}
         run: |
-          echo "REGISTRY: ${REGISTRY}"
-          echo "REPOSITORY: ${REPOSITORY}"
-          echo "IMAGE_TAG: ${IMAGE_TAG}"
+          echo "PACKAGE_VERSION: ${{ steps.define-variables.outputs.PACKAGE_VERSION }}"
+          echo "HEAD_COMMIT_SHA: ${{ steps.define-variables.outputs.HEAD_COMMIT_SHA }}"
+          echo "DEVELOP_BRANCH_HASH: ${{ steps.define-variables.outputs.DEVELOP_BRANCH_HASH }}"
+        #   echo "INTEGRATED_VERSION: ${{ steps.define-variables.outputs.INTEGRATED_VERSION }}"
+      
+    #   - name: Build, tag, and push docker image to Amazon ECR
+    #     env:
+    #       REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+    #       REPOSITORY: nop-ecr-repo
+    #       IMAGE_TAG: "${{ steps.define-variables.outputs.PACKAGE_VERSION }}-alpha.${{ steps.define-variables.outputs.HEAD_COMMIT_SHA }}-epic.NOP-{ticket_number}"
+    #     run: |
+    #       echo "REGISTRY: ${REGISTRY}"
+    #       echo "REPOSITORY: ${REPOSITORY}"
+    #       echo "IMAGE_TAG: ${IMAGE_TAG}"
         
 
     # steps:
