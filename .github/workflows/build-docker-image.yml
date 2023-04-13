@@ -50,8 +50,6 @@ jobs:
       - name: Define variables
         id: define-variables
         run: |
-          git remote update
-
           echo "GITHUB_SHA: ${GITHUB_SHA}"
           echo "GITHUB_REF: ${GITHUB_REF}"
 
@@ -63,7 +61,9 @@ jobs:
 
           echo "PACKAGE_VERSION=$(grep version package.json | awk -F \" '{print $4}')" >> "$GITHUB_OUTPUT"
           echo "HEAD_COMMIT_SHA=$(git rev-parse HEAD)" >> "$GITHUB_OUTPUT"
-          echo "DEVELOP_BRANCH_HASH=$(git rev-parse refs/remotes/origin/develop)" >> "$GITHUB_OUTPUT"
+
+          git fetch --depth=1 origin develop
+          echo "DEVELOP_BRANCH_HASH=$(git rev-parse origin/develop)" >> "$GITHUB_OUTPUT"
         #   echo "INTEGRATED_VERSION=$(node ./scripts/jira.js integrated-version ${{ github.base_ref }} ${{ github.sha }} $DEVELOP_BRANCH_HASH)" >> "$GITHUB_OUTPUT"
     
       - name: Update package.json
