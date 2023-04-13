@@ -6,6 +6,7 @@
 
 echo "GITHUB_ACTOR: ${GITHUB_ACTOR}"
 echo "INTEGRATED_VERSION: ${INTEGRATED_VERSION}"
+echo "GITHUB_BASE_REF: ${GITHUB_BASE_REF}"
 
 if [ $IS_GITHUB_ACTIONS == 'true' ]; then
   # set git user (triggered by github actions)
@@ -23,15 +24,15 @@ if [ $IS_GITHUB_ACTIONS == 'true' ]; then
 
     git status
 
-    # git add package.json .yarn
-    # git commit -m ":bookmark: ${INTEGRATED_VERSION}"
+    git add package.json
+    git commit -m ":bookmark: ${INTEGRATED_VERSION}"
 
-    # PUSH_TARGET_BRANCH="HEAD:${GITHUB_BASE_REF}"
+    PUSH_TARGET_BRANCH="HEAD:${GITHUB_BASE_REF}"
 
-    # # echo "PUSH_TARGET_BRANCH: ${PUSH_TARGET_BRANCH}" #HEAD:epic/NOP-29
+    echo "PUSH_TARGET_BRANCH: ${PUSH_TARGET_BRANCH}" #HEAD:epic/NOP-29
 
-    # git tag $INTEGRATED_VERSION
-    # git push origin $PUSH_TARGET_BRANCH --tags
+    git tag $INTEGRATED_VERSION
+    git push origin $PUSH_TARGET_BRANCH --tags
   fi
 fi
 
