@@ -32,10 +32,10 @@ jobs:
         with:
           node-version: ${{ matrix.node-version }}
 
-      #   - name: Configuration
-      #     run: |
-      #       corepack enable
-      #       corepack prepare yarn@stable --activate
+      - name: Configuration
+        run: |
+          corepack enable
+          corepack prepare yarn@stable --activate
 
       #   - name: Configure AWS credentials
       #     uses: aws-actions/configure-aws-credentials@v2
