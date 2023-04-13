@@ -87,6 +87,7 @@ jobs:
           echo "INTEGRATED_VERSION: ${INTEGRATED_VERSION}"
           echo "IS_GITHUB_ACTIONS: ${IS_GITHUB_ACTIONS}"
 
+          git update-index --chmod=+x ./scripts/update-version.sh
           ./scripts/update-version.sh
 
     #   - name: Build, tag, and push docker image to Amazon ECR
