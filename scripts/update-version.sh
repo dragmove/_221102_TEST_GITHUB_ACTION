@@ -10,11 +10,11 @@ echo "GITHUB_BASE_REF: ${GITHUB_BASE_REF}"
 
 if [ $IS_GITHUB_ACTIONS == 'true' ]; then
   # set git user (triggered by github actions)
-  # GITHUB_ACTOR_NAME="$(git log -n 1 --pretty=format:%an)"
-  # GITHUB_ACTOR_EMAIL="$(git log -n 1 --pretty=format:%ae)"
+  GITHUB_ACTOR_NAME="$(git log -n 1 --pretty=format:%an)"
+  GITHUB_ACTOR_EMAIL="$(git log -n 1 --pretty=format:%ae)"
 
-  # git config --global user.name "${GITHUB_ACTOR_NAME}"
-  # git config --global user.email "${GITHUB_ACTOR_EMAIL}"
+  git config --global user.name "${GITHUB_ACTOR_NAME}"
+  git config --global user.email "${GITHUB_ACTOR_EMAIL}"
 
   # update version in package.json when branches are merged
   if [ "$GITHUB_BASE_REF" != 'main' ]; then
