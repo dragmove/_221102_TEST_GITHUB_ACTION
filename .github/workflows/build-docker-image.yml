@@ -50,6 +50,8 @@ jobs:
       - name: Define variables
         id: define-variables
         run: |
+          git remote update
+
           echo "GITHUB_SHA: ${GITHUB_SHA}"
           echo "GITHUB_REF: ${GITHUB_REF}"
 
