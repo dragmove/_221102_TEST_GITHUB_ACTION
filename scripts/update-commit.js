@@ -6,14 +6,14 @@ function printIntegratedVersion(
   triggerCommitHash,
   developCommitHash
 ) {
-  console.log("baseBranchName :", baseBranchName);
-  console.log("triggerCommitHash :", triggerCommitHash);
-  console.log("developCommitHash :", developCommitHash);
+  console.log("baseBranchName %s", baseBranchName);
+  console.log("triggerCommitHash %s", triggerCommitHash);
+  console.log("developCommitHash %s", developCommitHash);
 
   const [, prodVersion, baseCommitHash = developCommitHash] =
     pkgVersionRegex.exec(pkg.version);
-  console.log("prodVersion :", prodVersion);
-  console.log("baseCommitHash :", baseCommitHash);
+  console.log("prodVersion %s", prodVersion);
+  console.log("baseCommitHash %s", baseCommitHash);
 
   let intVersion;
   if (baseBranchName === "main") {
